@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core import serializers
-from .forms import CreateAccountForm, CreateListingForm, LoginForm
+from .forms import CreateAccountForm, CreateListingForm, LoginForm, SearchForm
 from django.http import JsonResponse, HttpResponse
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -121,5 +121,37 @@ def create_account(request):
 	else:
 		msg = "Successfully created an account"
 		return render(request, 'api/create_account.html', {'form': form, 'msg': msg})
+
+
+def search_listing(request):
+	search_res = None
+	if request.method=='GET':
+		form = SearchForm()
+		return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': True})
+	form = SearchForm(request.POST)
+	if not form.is_valid():
+		return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': False})
+	post_data = {
+		'query': form.cleaned_data['query']
+	}
+	post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+	req = urllib.request.Request('http://exp-api:8000/search/', data=post_encoded, method='POST')
+	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+	resp = json.loads(resp_json)
+	if resp['ok']:
+		search_res = resp['result']
+	return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': False})
+
+
+
+
+
+
+
+
+
+
+
+
 
 	

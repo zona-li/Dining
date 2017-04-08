@@ -16,3 +16,6 @@ class CreateAccountForm(forms.Form):
     username = forms.CharField(label='Username', max_length=32)
     email = forms.EmailField(label='Email')
     password = forms.CharField(label='Password', max_length=32, widget=forms.PasswordInput)
+
+class SearchForm(forms.Form):
+    query = forms.CharField(label='Search Query', max_length=200)

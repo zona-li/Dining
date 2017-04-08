@@ -216,7 +216,7 @@ def create_listing(request):
 
 
 def search_listing(request):
-	response = {'ok': False}
+	response = {'ok': False, 'result': []}
 	if request.method != 'GET':
 	    response['ok'] = "Invalid. Expecting GET request."
 	else:
@@ -224,7 +224,6 @@ def search_listing(request):
 		es = Elasticsearch(['es'])
 		search_response = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
 		response['ok'] = True
-		response['result'] = []
 		for hit in search_response['hits']['hits']:		
 			response['result'].append(hit['_source'])
 	return JsonResponse(response)
