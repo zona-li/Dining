@@ -195,11 +195,11 @@ def check_dup(request):
 def create_listing(request):
 	if request.method == "POST":
 		post = request.POST.dict()
-		# data = urllib.parse.urlencode(post).encode('utf-8')
-		# req = urllib.request.Request('http://models-api:8000/api/v1/auth/check',data)
-		# resp = urllib.request.urlopen(req).read().decode('utf-8')
-		# if resp == "Authenticator does not exist.":
-		# 	return JsonResponse("Only authenticated users can create new listings.", safe=False)
+		data = urllib.parse.urlencode(post).encode('utf-8')
+		req = urllib.request.Request('http://models-api:8000/api/v1/auth/check',data)
+		resp = urllib.request.urlopen(req).read().decode('utf-8')
+		if resp == "Authenticator does not exist.":
+			return JsonResponse("Only authenticated users can create new listings.", safe=False)
 		
 		data = urllib.parse.urlencode(post).encode('utf-8')
 		req2 = urllib.request.Request('http://models-api:8000/api/v1/meals/create', data)
@@ -216,18 +216,17 @@ def create_listing(request):
 
 
 def search_listing(request):
-	query = request.GET['query']
-	response = {}
-	try:
+	response = {'ok': False}
+	if request.method != 'GET':
+	    response['ok'] = "Invalid. Expecting GET request."
+	else:
+		query = request.GET['query']
 		es = Elasticsearch(['es'])
 		search_response = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
 		response['ok'] = True
 		response['result'] = []
 		for hit in search_response['hits']['hits']:		
 			response['result'].append(hit['_source'])
-	except ElasticsearchException as error:
-		response['ok'] = False
-		response['result'] = error
 	return JsonResponse(response)
 
 
