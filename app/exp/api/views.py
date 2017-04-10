@@ -208,6 +208,7 @@ def create_listing(request):
 			listing_info = resp2['result']
 			producer = KafkaProducer(bootstrap_servers='kafka:9092')
 			producer.send('new-listings-topic', json.dumps(listing_info).encode('utf-8'))
+			print(listing_info)
 		except KeyError:
 			return JsonResponse("Cannot create new listing", safe=False)
 		return JsonResponse(listing_info, safe=False)
@@ -217,10 +218,10 @@ def create_listing(request):
 
 def search_listing(request):
 	response = {'ok': False, 'result': []}
-	if request.method != 'GET':
-	    response['ok'] = "Invalid. Expecting GET request."
+	if request.method == 'GET':
+	    response['ok'] = "Invalid. Expecting POST request."
 	else:
-		query = request.GET['query']
+		query = request.POST['query']
 		es = Elasticsearch(['es'])
 		search_response = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
 		response['ok'] = True

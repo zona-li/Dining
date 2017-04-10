@@ -6,7 +6,7 @@ models:
       - "$PWD:/app"
     ports:
       - "8001:8000"
-    command: bash -c " python /app/models/manage.py makemigrations api && python /app/models/manage.py migrate && python /app/models/manage.py loaddata /app/models/db.json && mod_wsgi-express start-server --working-directory /app/models --reload-on-changes /app/models/models/wsgi.py"
+    command: bash -c " python /app/models/manage.py makemigrations api && python /app/models/manage.py migrate && python /app/models/manage.py loaddata /app/models/db.json && mod_wsgi-express start-server --working-directory /app/models --reload-on-changes --log-to-terminal /app/models/models/wsgi.py"
 
 exp:
    image: tp33/django 
@@ -18,7 +18,7 @@ exp:
       - "8002:8000"
    volumes:
       - "$PWD:/app"
-   command: bash -c "mod_wsgi-express start-server --working-directory /app/exp --reload-on-changes /app/exp/exp/wsgi.py"
+   command: bash -c "mod_wsgi-express start-server --working-directory /app/exp --reload-on-changes --log-to-terminal /app/exp/exp/wsgi.py"
 
 
 web:
@@ -53,4 +53,4 @@ batch:
       - es:es
    volumes:
       - "$PWD:/app"
-   command: bash -c "python index_batch.py"
+   command: python index_batch.py

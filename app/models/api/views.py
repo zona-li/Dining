@@ -102,8 +102,10 @@ def create_cafe(request):
 	if request.method == 'POST':
 		result = {}
 		result_msg = None
+		#u = Cafe.objects.get(name = request.POST['name'])
 		try:
 			req_input = {
+			#'id': u.pk,
 			'name': request.POST['name'],
 			'location':request.POST['location'],
 			'date':request.POST['date'],
