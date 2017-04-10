@@ -130,7 +130,7 @@ def search_listing(request):
 		return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': True})
 	form = SearchForm(request.POST)
 	if not form.is_valid():
-		return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': False})
+		return render(request, 'api/form_not_valid.html', {'search_form': form, 'res': search_res, 'firstvisit': False})
 	post_data = {
 		'query': form.cleaned_data['query']
 	}
