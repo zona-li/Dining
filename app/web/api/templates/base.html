@@ -34,17 +34,19 @@
                     <span class="glyphicon glyphicon-glass" aria-hidden="true"></span>&nbsp; Meals
                 </a>
             </li>
-            <li>
-                {% include "api/searchbar.html" with search_class="navbar-form" %}
-            </li>
         </ul>
-
         <ul class="nav navbar-nav navbar-right">
+            <li class="">
+                <a href="{% url 'search_listing' %}">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp; Search
+                </a>
+            </li>
+       <!--  <ul class="nav navbar-nav navbar-right">
             <li class="">
                 <a href="#">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Comment
                 </a>
-            </li>
+            </li> -->
             <li class="">
                 <a href="{% url 'create_listing' %}">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Create Listings

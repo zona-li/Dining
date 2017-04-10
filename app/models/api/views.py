@@ -102,10 +102,8 @@ def create_cafe(request):
 	if request.method == 'POST':
 		result = {}
 		result_msg = None
-		#u = Cafe.objects.get(name = request.POST['name'])
 		try:
 			req_input = {
-			#'id': u.pk,
 			'name': request.POST['name'],
 			'location':request.POST['location'],
 			'date':request.POST['date'],
@@ -119,6 +117,7 @@ def create_cafe(request):
 			cafe = form.save()
 			result["ok"] = True
 			result["result"] = req_input
+			result["id"] = cafe.pk
 			return JsonResponse(result,safe=False)
 		else:
 			result_msg = "Input did not contain all the required fields."

@@ -206,6 +206,7 @@ def create_listing(request):
 		try:
 			resp2 = json.loads(urllib.request.urlopen(req2).read().decode('utf-8'))
 			listing_info = resp2['result']
+			listing_info['id'] = resp2['id']
 			producer = KafkaProducer(bootstrap_servers='kafka:9092')
 			producer.send('new-listings-topic', json.dumps(listing_info).encode('utf-8'))
 			print(listing_info)
@@ -223,7 +224,7 @@ def search_listing(request):
 	else:
 		query = request.POST['query']
 		es = Elasticsearch(['es'])
-		search_response = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
+		search_response = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}})
 		response['ok'] = True
 		for hit in search_response['hits']['hits']:		
 			response['result'].append(hit['_source'])
