@@ -20,4 +20,4 @@ before_script:
 - docker-compose up -d
 - sleep 50
 script:
-- docker exec -it models_container bash -c "cd models && python manage.py test"
+- docker exec -it models_container bash -c "cd /app/models && python manage.py test"
