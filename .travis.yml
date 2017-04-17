@@ -19,4 +19,4 @@ before_script:
 - docker-compose up -d
 - sleep 70
 script:
-- docker exec -it web_container bash -c "cd web && python manage.py test --noinput"
+- docker exec -it models_container bash -c "cd models && python manage.py test --noinput"
