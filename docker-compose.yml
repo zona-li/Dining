@@ -2,6 +2,7 @@ models:
     image: tp33/django
     external_links:
       -  mysql:db
+    container_name: models_container
     volumes:
       - "$PWD/app:/app"
     ports:

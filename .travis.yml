@@ -17,6 +17,6 @@ before_install:
 
 before_script:
 - docker-compose up -d
-- sleep 50
+- sleep 20
 script:
 - docker exec -it models_container bash -c "cd /app/models && python manage.py test"
