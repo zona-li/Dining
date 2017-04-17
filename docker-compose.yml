@@ -3,7 +3,7 @@ models:
     external_links:
       -  mysql:db
     volumes:
-      - "$PWD:/app"
+      - "$PWD/app:/app"
     ports:
       - "8001:8000"
     command: bash -c " python /app/models/manage.py makemigrations api && python /app/models/manage.py migrate && python /app/models/manage.py loaddata /app/models/db.json && mod_wsgi-express start-server --working-directory /app/models --reload-on-changes --log-to-terminal /app/models/models/wsgi.py"
@@ -17,7 +17,7 @@ exp:
    ports:
       - "8002:8000"
    volumes:
-      - "$PWD:/app"
+      - "$PWD/app:/app"
    command: bash -c "mod_wsgi-express start-server --working-directory /app/exp --reload-on-changes --log-to-terminal /app/exp/exp/wsgi.py"
 
 
@@ -28,7 +28,7 @@ web:
    ports:
       - "8003:8000"
    volumes:
-      - "$PWD:/app"
+      - "$PWD/app:/app"
    command: bash -c "mod_wsgi-express start-server --working-directory /app/web --reload-on-changes /app/web/web/wsgi.py"
 
 kafka:
