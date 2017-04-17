@@ -28,6 +28,7 @@ web:
       - exp:exp-api
    ports:
       - "8003:8000"
+   container_name: web_container   
    volumes:
       - "$PWD/app:/app"
    command: bash -c "mod_wsgi-express start-server --working-directory /app/web --reload-on-changes /app/web/web/wsgi.py"
