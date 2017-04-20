@@ -1,24 +1,38 @@
 sudo: required
+dist: trusty # google-cloud-engine mod of ubuntu 14.04.3 LTS
 
-language: python
-
+# if specific versions of docker or docker-compose are needed, see travis-CI docs
 services:
-  - docker
+  - docker # default is docker 1.8.2 and docker-compose 1.4.2 (as of Oct. 2016)
 
-before_install:
-- docker pull tp33/django
-- docker pull mysql:5.7.14
-- mkdir db
-- docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
-- sleep 20
-- docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 mysql -uroot -p'$3cureUS' -h db -e "create user 'www'@'%' identified by '$3cureUS'; create database cs4501 character set utf8; grant all on *.* to 'www'@'%';"
-- docker rm mysql-cmdline
-- docker ps -a
+install: # prepare mySQL database
+  - docker pull mysql:5.7.14
+  - mkdir db
+  - >
+    docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS'
+    -v `pwd`/db:/var/lib/mysql mysql:5.7.14
+  - sleep 10 # need to give time for mysql to start
+  - >
+    docker run -it --name mysql-cmd --rm --link mysql:db mysql:5.7.14
+    mysql -uroot -p'$3cureUS' -h db -v -e
+    "CREATE DATABASE cs4501 CHARACTER SET utf8;
+    CREATE DATABASE test_cs4501 CHARACTER SET utf8;
+    CREATE USER 'www'@'%' IDENTIFIED BY '\$3cureUS';
+    GRANT ALL PRIVILEGES ON *.* TO 'www'@'%';"
 
 before_script:
-- docker-compose up -d
-- sleep 70
+  - docker-compose up -d
+
 script:
-- docker exec -it web_container bash -c "cd web && python manage.py test"
-- docker exec -it models_container bash -c "cd models && python manage.py test"
-#Error response from daemon: Container 261a0d2b722af26ca097c0af378b7e664ce41290f2a76d438f18ad03b6c57b23 is not running
+  - >
+    docker exec -it models bash -c     # 'models' is the name of the docker container
+    "pip install -r requirements.txt &&
+    python manage.py test --noinput" # run Django unit tests on models
+  # can put other tests (e.g. integrations) here too with exp, web containers
+
+after_script:
+  - docker-compose stop
+  - docker stop mysql
+  - docker rm `docker ps -a -q`
+  - docker rmi `docker images -q`
+  - rm -rf db
