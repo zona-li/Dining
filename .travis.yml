@@ -25,7 +25,7 @@ before_script:
 
 script:
   - >
-    docker exec -it models_container bash -c "cd web && python manage.py test --noinput"
+    docker exec -it models_container bash -c "cd models && python manage.py test --noinput"
 
 after_script:
   - docker-compose stop
