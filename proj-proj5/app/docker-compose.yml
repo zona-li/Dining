@@ -21,7 +21,7 @@ exp:
    command: bash -c "mod_wsgi-express start-server --working-directory /app/exp --reload-on-changes --log-to-terminal /app/exp/exp/wsgi.py"
 
 
-web:
+web1:
    image: tp33/django
    links:
       - exp:exp-api
@@ -30,6 +30,17 @@ web:
    volumes:
       - "$PWD:/app"
    command: bash -c "pip install selenium && mod_wsgi-express start-server --working-directory /app/web --reload-on-changes /app/web/web/wsgi.py"
+
+
+web2:
+   image: tp33/django
+   links:
+      - exp:exp-api
+   ports:
+      - "8004:8000"
+   volumes:
+      - "$PWD:/app"
+   command: bash -c "mod_wsgi-express start-server --working-directory /app/web --reload-on-changes /app/web/web/wsgi.py"
 
 kafka:
    image: spotify/kafka
