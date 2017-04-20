@@ -54,3 +54,10 @@ batch:
    volumes:
       - "$PWD:/app"
    command: python index_batch.py
+
+hp:
+  build: ./HAProxy_Config
+  links:
+    - web:web
+  ports:
+    - "8000:8000"
