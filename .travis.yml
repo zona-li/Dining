@@ -25,6 +25,3 @@ script:
 after_script:
 	- docker-compose stop
   - docker stop mysql
-  - docker rm `docker ps -a -q`
-  - docker rmi `docker images -q`
-  - rm -rf db
