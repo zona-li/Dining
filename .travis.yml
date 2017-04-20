@@ -25,9 +25,7 @@ before_script:
 
 script:
   - >
-    docker exec -it models_container bash -c     # 'models' is the name of the docker container
-    "python manage.py test --noinput" # run Django unit tests on models
-  # can put other tests (e.g. integrations) here too with exp, web containers
+    docker exec -it models_container bash -c "cd web && python manage.py test --noinput"
 
 after_script:
   - docker-compose stop
