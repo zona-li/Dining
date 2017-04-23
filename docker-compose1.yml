@@ -40,6 +40,8 @@ kafka:
 es:
    image: elasticsearch:2.0
    container_name: es
+   ports:
+      - "9200:9200"
 
 batch:
    image: tp33/django
