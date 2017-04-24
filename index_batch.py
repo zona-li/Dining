@@ -11,12 +11,11 @@ sleep(20)
 print("haha")
 
 # Pull messages from kafka
-consumer = None 
-while not consumer:
+while True:
 	try:
 		consumer = KafkaConsumer('new-listings-topic', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])
 	except NodeNotReadyError:
-		time.sleep(20)
+		continue
 
 es = Elasticsearch(['es'])
 
