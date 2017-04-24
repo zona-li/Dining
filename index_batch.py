@@ -6,9 +6,9 @@ import sys
 import time
 from time import sleep
 
-print("test\ntest\ntest\ntest\ntest\ntest")
+# print("test\ntest\ntest\ntest\ntest\ntest")
 sleep(20)
-print("haha")
+# print("haha")
 
 # Pull messages from kafka
 consumer = None 
