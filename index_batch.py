@@ -1,5 +1,6 @@
 from kafka import KafkaConsumer
 from elasticsearch import Elasticsearch
+from kafka.common import NodeNotReadyError
 import json
 from time import sleep
 
@@ -8,7 +9,13 @@ sleep(20)
 print("haha")
 
 # Pull messages from kafka
-consumer = KafkaConsumer('new-listings-topic', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])
+consumer = None 
+while not consumer:
+	try:
+		consumer = KafkaConsumer('new-listings-topic', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])
+	except NodeNotReadyError:
+		time.sleep(20)
+
 es = Elasticsearch(['es'])
 
 print("before for loop")
