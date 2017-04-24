@@ -16,18 +16,19 @@ while not consumer:
 	try:
 		consumer = KafkaConsumer('new-listings-topic', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])
 	except NodeNotReadyError:
-		time.sleep(40)
+		time.sleep(100)
 
 es = Elasticsearch(['es'])
 
 print("before for loop")
 print(consumer)
-for message in consumer:
-    print("in for loop")
-    new_listing = json.loads((message.value).decode('utf-8'))
-    # Index the message in elastic search
+while True: 
+	for message in consumer:
+	    print("in for loop")
+	    new_listing = json.loads((message.value).decode('utf-8'))
+	    # Index the message in elastic search
 
-    es.index(index='listing_index', doc_type='listing', id=new_listing['id'], body=new_listing)
-    print(new_listing['name'])
-    # Commit the changes to the index files
-    es.indices.refresh(index="listing_index")
+	    es.index(index='listing_index', doc_type='listing', id=new_listing['id'], body=new_listing)
+	    print(new_listing['name'])
+	    # Commit the changes to the index files
+	    es.indices.refresh(index="listing_index")
