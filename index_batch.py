@@ -2,6 +2,8 @@ from kafka import KafkaConsumer
 from elasticsearch import Elasticsearch
 from kafka.common import NodeNotReadyError
 import json
+import sys
+import time
 from time import sleep
 
 print("test\ntest\ntest\ntest\ntest\ntest")
