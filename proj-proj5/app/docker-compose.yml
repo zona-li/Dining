@@ -66,9 +66,10 @@ batch:
       - "$PWD:/app"
    command: python index_batch.py
 
-hp:
+lb:
   build: ./HAProxy_Config
   links:
-    - web:web
+    -  web1:web1
+    -  web2:web2
   ports:
     - "8000:8000"
