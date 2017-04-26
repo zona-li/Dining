@@ -11,11 +11,12 @@ import urllib.parse
 import json
 
 def home(request):
-    req = urllib.request.Request('http://exp-api:8000/home/')
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)  
-    context = {'meals': resp[0],'allcomments': resp[1]}
-    return render(request, 'api/index.html', context)
+		auth = request.COOKIES.get('authenticator')	
+		req = urllib.request.Request('http://exp-api:8000/home/')
+		resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+		resp = json.loads(resp_json)  
+		context = {'meals': resp[0],'allcomments': resp[1], 'auth':auth}
+		return render(request, 'api/index.html', context)
 
 def meal(request, cafe_id):
 		req1 = urllib.request.Request('http://exp-api:8000/meal/'+ cafe_id)
@@ -93,7 +94,7 @@ def create_listing(request):
 			return render(request, 'api/create_listing.html', {'form': form,'msg':msg})
 	else:
 		form = CreateListingForm()
-	return render(request, 'api/create_listing.html', {'form': form})
+	return render(request, 'api/create_listing.html', {'form': form,'auth':auth})
 
 
 
@@ -124,13 +125,15 @@ def create_account(request):
 
 
 def search_listing(request):
+	auth = request.COOKIES.get('authenticator')	
+	#return HttpResponse(auth)
 	search_res = None
 	if request.method=='GET':
 		form = SearchForm()
-		return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': True})
+		return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': True,'auth':auth})
 	form = SearchForm(request.POST)
 	if not form.is_valid():
-		return render(request, 'api/form_not_valid.html', {'search_form': form, 'res': search_res, 'firstvisit': False})
+		return render(request, 'api/form_not_valid.html', {'search_form': form, 'res': search_res, 'firstvisit': False,'auth':auth})
 	post_data = {
 		'query': form.cleaned_data['query']
 	}
@@ -140,7 +143,7 @@ def search_listing(request):
 	resp = json.loads(resp_json)
 	if resp['ok']:
 		search_res = resp['result']
-	return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': False})
+	return render(request, 'api/search_listing.html', {'search_form': form, 'res': search_res, 'firstvisit': False,'auth':auth})
 
 
 

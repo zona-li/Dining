@@ -20,8 +20,8 @@ while not consumer:
 
 es = Elasticsearch(['es'])
 
-print("before for loop")
-print(consumer)
+# print("before for loop")
+# print(consumer)
 while True: 
 	for message in consumer:
 	    print("in for loop")

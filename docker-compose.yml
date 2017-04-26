@@ -5,8 +5,6 @@ models:
     container_name: models_container
     volumes:
       - "$PWD/app:/app"
-    ports:
-      - "8001:8000"
     command: bash -c " python /app/models/manage.py makemigrations api && python /app/models/manage.py migrate && python /app/models/manage.py loaddata /app/models/db.json && mod_wsgi-express start-server --working-directory /app/models --reload-on-changes --log-to-terminal /app/models/models/wsgi.py"
 
 exp:
@@ -15,23 +13,26 @@ exp:
       - models:models-api
       - kafka:kafka
       - es:es
-   ports:
-      - "8002:8000"
    volumes:
       - "$PWD/app:/app"
    command: bash -c "mod_wsgi-express start-server --working-directory /app/exp --reload-on-changes --log-to-terminal /app/exp/exp/wsgi.py"
 
-
-web:
+web1:
    image: tp33/django
    links:
       - exp:exp-api
-   ports:
-      - "8003:8000"
-   container_name: web_container   
    volumes:
       - "$PWD/app:/app"
-   command: bash -c "mod_wsgi-express start-server --working-directory /app/web --reload-on-changes /app/web/web/wsgi.py"
+   command: bash -c "pip install selenium && mod_wsgi-express start-server --working-directory /app/web --reload-on-changes /app/web/web/wsgi.py"
+
+
+web2:
+   image: tp33/django
+   links:
+      - exp:exp-api
+   volumes:
+      - "$PWD/app:/app"
+   command: bash -c "pip install selenium && mod_wsgi-express start-server --working-directory /app/web --reload-on-changes /app/web/web/wsgi.py"
 
 kafka:
    image: spotify/kafka
@@ -56,3 +57,14 @@ batch:
    volumes:
       - "$PWD:/app"
    command: python index_batch.py
+
+haproxy:
+  container_name: haproxy
+  image: my-haproxy
+  volumes:
+    - "$PWD:/app"
+  links:
+    - web1:web1
+    - web2:web2
+  ports:
+    - "8080:80"
