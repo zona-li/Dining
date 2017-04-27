@@ -19,6 +19,7 @@ exp:
 
 web1:
    image: tp33/django
+   container_name: web1
    links:
       - exp:exp-api
    volumes:
@@ -28,6 +29,7 @@ web1:
 
 web2:
    image: tp33/django
+   container_name: web2
    links:
       - exp:exp-api
    volumes:
