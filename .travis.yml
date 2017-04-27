@@ -23,5 +23,5 @@ script:
 	docker exec -it models_container bash -c "cd models && python manage.py test"
 
 after_script:
-	- docker-compose stop
-  - docker stop mysql
+- docker-compose stop
+- docker stop mysql
