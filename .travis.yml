@@ -13,7 +13,6 @@ install:
 - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql  mysql:5.7.14
 - sleep 20
 - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 mysql -uroot -p'$3cureUS' -h db -v -e "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8;create database test_cs4501 character set utf8; grant all privileges on *.* to 'www'@'%';"
-- cd haproxy
 - docker build -t my-haproxy .
 - cd ..
 
