@@ -8,7 +8,7 @@ class HomeTest(unittest.TestCase):
 
 	def setUp(self):
 		self.driver = webdriver.Chrome()
-		self.driver.get("http://localhost:8003/home/")
+		self.driver.get("http://localhost:8080/home/")
 		self.driver.implicitly_wait(5)
 
 	def test_home_title(self):
@@ -29,7 +29,7 @@ class OtherPagesTest(unittest.TestCase):
 
 	def test_login(self):
 		# Sign up
-		self.driver.get("http://localhost:8003/create_account/")
+		self.driver.get("http://localhost:8080/create_account/")
 		susrname = self.driver.find_element_by_id("username")
 		semail = self.driver.find_element_by_id("email")
 		spsw = self.driver.find_element_by_id("password")
@@ -40,7 +40,7 @@ class OtherPagesTest(unittest.TestCase):
 		ssubmit_button.submit()
 
 		# Log in
-		self.driver.get("http://localhost:8003/login/")
+		self.driver.get("http://localhost:8080/login/")
 		usrname = self.driver.find_element_by_id("username")
 		psw = self.driver.find_element_by_id("password")
 		usrname.send_keys("zona")
@@ -50,7 +50,7 @@ class OtherPagesTest(unittest.TestCase):
 
 
 		# Create meals
-		self.driver.get("http://localhost:8003/create_listing/")
+		self.driver.get("http://localhost:8080/create_listing/")
 		mealname = self.driver.find_element_by_id("mealname")
 		description = self.driver.find_element_by_id("description")
 		location = self.driver.find_element_by_id("location")

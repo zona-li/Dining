@@ -66,7 +66,7 @@
 {% endif %}
    <form action="/create_listing/" method="post">
     <label for="name">Name: </label>
-    <input id="name" type="text" name="name" value="{{ name }}"><br>
+    <input id="mealname" type="text" name="name" value="{{ name }}"><br>
     <label for="description">Description: </label>
     <input id="description" type="text" name="description" value="{{ description }}"><br>
     <label for="location">Location: </label>
@@ -75,7 +75,7 @@
     <input id="date" type="text" name="date" value="{{ date }}"><br>
     <label for="Calories">Calories: </label>
     <input id="Calories" type="text" name="Calories" value="{{ Calories }}"><br>
-    <input type="submit" value="OK">
+    <input type="submit" id="submit_button" value="OK">
 </form>
 </body>
 </html>
