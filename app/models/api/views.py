@@ -304,6 +304,41 @@ def retrieve_comment_all(request):
 		else:
 				return JsonResponse("Must make GET request.",safe=False)
 
+def retrieve_recommendation(request):
+	if request.method == 'POST':
+		recommendation = Recommendation.objects.get(item_id=item_id)
+		try:
+			recommendationList = [model_to_dict(recommendation)]
+		except ObjectDoesNotExist:
+			return JsonResponse("recommended items do not exist.",safe=False)
+		return JsonResponse(model_to_dict(recommendation))	
+	else:
+		return JsonResponse("Must make GET request.",safe=False)
+
+def create_recommendations(request):
+	if request.method == 'POST':
+		recommendationList = Recommendation.objects.filter(item_id=request.POST['item_id'])
+		if len(recommendationList) == 0:
+			recommendation = Recommendation(item_id = request.POST['item_id'], recommended_items = request.POST['recommendation_id']+",")
+			recommendation.save()
+		else:
+			recommendationList[0].recommended_items = recommendationList[0].recommended_items + request.POST['recommendation_id']+","
+			recommendationList[0].save()
+		return JsonResponse(recommendationList,safe=False)
+	else:
+		return JsonResponse("Must Post",safe=False)
+
+def delete_recommendations(request):
+	if request.method == 'POST':
+		recommendationList = Recommendation.objects.filter(item_id=request.POST['item_id'])
+		if len(recommendationList) != 0:
+			recommendationList[0].delete()
+			return JsonResponse("Successfully deleted the recommended items", safe=False)
+		else:
+			return JsonResponse("No recommended items", safe=False)
+	else:
+		return JsonResponse("Must Post",safe=False)
+
 class CafeRetrieveUpdate(View):
 
 	def get(self, request, pk):
@@ -348,26 +383,4 @@ class CommentRetrieveUpdate(View):
 			return JsonResponse(model_to_dict(comment))			
 		except ObjectDoesNotExist:
 			return JsonResponse("Comment does not exist.",safe=False)
-
-# class ProfileRetrieveUpdate(View):
-# 	def get(self, request, pk):
-# 		try:
-# 			profile = Profile.objects.get(pk=pk)
-# 			if hashers.check_password(request.POST['password'], profile.password):
-# 				return JsonResponse(model_to_dict(profile))			
-# 		except ObjectDoesNotExist:
-# 			return JsonResponse("Profile does not exist.",safe=False)
-
-# 	def post(self, request, pk):
-# 		result = {}
-# 		try:
-# 			profile = Profile.objects.get(pk=pk)
-# 			profile_fields = [p_field.username for p_field in Profile._meta.get_fields()]
-# 			for field in profile_fields:
-# 				if field in request.POST:
-# 					setattr(profile, field, request.POST[field])
-# 			profile.save()
-# 			return JsonResponse(model_to_dict(profile))			
-# 		except ObjectDoesNotExist:
-# 			return JsonResponse("Profile does not exist.",safe=False)
 

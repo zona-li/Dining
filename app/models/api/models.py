@@ -45,4 +45,6 @@ class Comment(models.Model):
 	def get_absolute_url(self):
 		return reverse('comment-update', kwargs={'pk': self.pk})
 
-
+class Recommendation(models.Model):
+	item_id = models.PositiveIntegerField()
+	recommended_items = models.TextField()
