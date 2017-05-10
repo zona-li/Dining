@@ -36,9 +36,9 @@ def meal(request, cafe_id):
 	req = urllib.request.Request('http://models-api:8000/api/v1/meals/' + cafe_id)
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	resp = json.loads(resp_json)
-	recommendations = urllib.request.Request('http://models-api:8000/api/v1/recommendations/retrieve', cafe_id)
-	resp['recs'] = recommendations
-	message = json.dumps([{'cafe': str(cafe_id)}, 'coview']).encode('utf-8')
+	# recommendations = urllib.request.Request('http://models-api:8000/api/v1/recommendations/retrieve', cafe_id)
+	# resp['recs'] = recommendations
+	message = json.dumps([{'user': str(resp), 'cafe': str(cafe_id)}, 'coview']).encode('utf-8')
 	kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092')
 	kafka_producer.send("cafe_topic", message)
 	return JsonResponse(resp, safe=False)
