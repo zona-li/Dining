@@ -1,14 +1,47 @@
 {% extends 'base.html' %}
 {% block body %}
 {% if resp %}
-    <ul>
-    <h2>Meal Detail</h2>
-    	<br>Name: {{ resp.name }}
-        <br>Location: {{ resp.location }}
-        <br>Date: {{ resp.date }}
-        <br>Description: {{ resp.description }}
-        <br>Calories:{{ resp.Calories }}
-    </ul>
+    <div class="page-header">
+        <ul>
+            <h2>Meal Detail</h2>
+        	<br>Name: {{ resp.name }}
+            <br>Location: {{ resp.location }}
+            <br>Date: {{ resp.date }}
+            <br>Description: {{ resp.description }}
+            <br>Calories:{{ resp.Calories }}
+        </ul>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">User Who Viewed This Meal Also Visited</h3>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Page for Meal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for meal in recommendations %}
+                    <tr>
+                        <td> {{meal.name}}</td>
+                        <td> {{meal.location}}</td>
+                        <td> {{meal.date}}</td>
+                        <td> <a class = "btn btn-primary user-meal" href="/meal/{{ meal.id }}/" role="button">Visit Page</a> </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+        </div>
+
 {% else %}
     <p>No such meal.</p>
     {%endif%}

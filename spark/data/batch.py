@@ -11,7 +11,7 @@ if __name__ == "__main__":
     while True:
         try:
             es = Elasticsearch(['es'])
-            task_consumer = KafkaConsumer("task_topic", group_id='listing_indexer'
+            cafe_consumer = KafkaConsumer("cafe_topic", group_id='listing_indexer'
                     , bootstrap_servers=['kafka:9092'])
             break
         except NodeNotReadyError:
@@ -28,17 +28,17 @@ if __name__ == "__main__":
             time.sleep(5)
             continue
     while True:
-        task_consumer = KafkaConsumer("task_topic", group_id='listing_indexer'
+        cafe_consumer = KafkaConsumer("cafe_topic", group_id='listing_indexer'
                 , bootstrap_servers=['kafka:9092'])
-        for message in task_consumer:
+        for message in cafe_consumer:
             new_listing = json.loads((message.value).decode('utf-8'))
             if new_listing[1] == "coview":
                 print("CONSUMING COVIEW MESSAGE")
-                log_string = new_listing[0]['user'] + "," + new_listing[0]['task'] + "\n"
+                log_string = new_listing[0]['user'] + "\t" + new_listing[0]['cafe'] + "\n"
                 print(log_string)
-                with open('logfile.txt', 'a') as coview_log_file:
+                with open('output.txt', 'a') as coview_log_file:
                     coview_log_file.write(log_string)
             else:
-                one = es.index(index='tasktic', doc_type=new_listing[1], id=new_listing[0]['id']
+                one = es.index(index='cafetic', doc_type=new_listing[1], id=new_listing[0]['id']
                         , body=new_listing[0])
-                two = es.indices.refresh(index='tasktic')
+                two = es.indices.refresh(index='cafetic')

@@ -1,5 +1,7 @@
 from pyspark import SparkContext
 import itertools
+import _mysql
+import MySQLdb
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
@@ -39,3 +41,30 @@ for item_id, count in output:
 print ("Done")
 
 sc.stop()
+
+
+
+db = MySQLdb.connect(host="db", user="www", passwd="$3cureUS", db="cs4501")
+cs = db.cursor()
+cs.execute("""TRUNCATE TABLE models_recommendation""")
+count = 1
+for item_id, count in output:
+	cs.execute("""INSERT INTO models_recommendation (id, item_id, recommended_items) VALUES (%s, %s, %s)""", (str(count), page_id[0], page_id[1]))
+	count = count + 1
+cs.execute("""SELECT * FROM models_recommendation""")
+print(cs.fetchall())
+
+cs.close()
+db.commit()
+db.close()
+
+db = MySQLdb.connect(host="db", user="www", passwd="$3cureUS", db="cs4501")
+cs = db.cursor()
+cs.execute("""SELECT * FROM models_recommendation""")
+print(cs.fetchall())
+cs.close()
+db.commit()
+db.close()
+
+
+

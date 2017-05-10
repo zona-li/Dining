@@ -38,6 +38,9 @@ def meal(request, cafe_id):
 	resp = json.loads(resp_json)
 	recommendations = urllib.request.Request('http://models-api:8000/api/v1/recommendations/retrieve', cafe_id)
 	resp['recs'] = recommendations
+	message = json.dumps([{'cafe': str(cafe_id)}, 'coview']).encode('utf-8')
+	kafka_producer = KafkaProducer(bootstrap_servers='kafka_container:9092')
+	kafka_producer.send("cafe_topic", message)
 	return JsonResponse(resp, safe=False)
 
 

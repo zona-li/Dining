@@ -1,0 +1,2 @@
+{"model": "api.cafe", "pk": 4, "fields": {"name": "Ham", "location": "Runk", "date": "2017-03-27T00:00:00Z", "description": "good", "Calories": 400}}
+{"model": "api.cafe", "pk": 6, "fields": {"name": "Fruit", "location": "Fresh Food Co.", "date": "2017-02-13T00:00:00Z", "description": "fresh", "Calories": 100}}
