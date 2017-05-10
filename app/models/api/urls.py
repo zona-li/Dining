@@ -30,8 +30,6 @@ urlpatterns = [
     # url(r'^auth/get/(?P<authenticator>\w+)$', views.getAuth, name="get_auth"),
     url(r'^auths$', views.authView, name="get_all_auth"),
 
-    url(r'^recommendations/retrieve$', views.retrieve_recommendation, name="retrieve_recommendation"),
-    url(r'^recommendations/create$', views.create_recommendation, name="create_recommendations"),
-    url(r'^recommendations/delete$', views.delete_recommendation, name="delete_recommendations"),
+    url(r'^recommendations/$', views.recommendations, name="recommendations"),
 
 ]

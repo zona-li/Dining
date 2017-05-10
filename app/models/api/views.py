@@ -384,3 +384,18 @@ class CommentRetrieveUpdate(View):
 		except ObjectDoesNotExist:
 			return JsonResponse("Comment does not exist.",safe=False)
 
+def recommendations(request):
+    if request.method == "POST":
+        Recommendation.objects.all().delete()
+        respDict = (request.POST).dict()
+        for key, value in respDict.items():
+            chunks = value.split()
+            task1 = Cafe.objects.get(pk=chunks[0])
+            task2 = Cafe.objects.get(pk=chunks[1])
+            newReco = Recommendation()
+            newReco.item_id = task1
+            newReco.recommended_items = task2
+            newReco.save()
+        return HttpResponse("Success")
+    else:
+        return HttpResponse("Only accept POST requests")

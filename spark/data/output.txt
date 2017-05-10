@@ -1,0 +1,5 @@
+co-viewed item_id: ('1', '4')	 count: 4
+co-viewed item_id: ('2', '6')	 count: 3
+co-viewed item_id: ('1', '2')	 count: 4
+co-viewed item_id: ('1', '6')	 count: 3
+Done

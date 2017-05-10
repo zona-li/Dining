@@ -12,7 +12,6 @@ class Profile(models.Model):
 
 class Authenticator(models.Model):
 	user_id = models.PositiveIntegerField(null=True)
-	#auth_user = models.ForeignKey(Profile, related_name='auth_user')
 	authenticator = models.CharField(primary_key=True, max_length=255)
 	date_created = models.DateTimeField()
 
@@ -34,10 +33,8 @@ class Cafe(models.Model):
 class Comment(models.Model):
 	description = models.CharField(max_length=1300)
 	feedback = models.CharField(max_length=300)
-	#author = models.ForeignKey(profile_models.Profile, null=True)
 	date_written = models.DateTimeField(null=True) 
 	rating = models.PositiveIntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(5),])
-	#meal = models.ForeignKey(cafe_models.Cafe, null=True)
 
 	def __str__(self):
 		return self.description
@@ -46,5 +43,5 @@ class Comment(models.Model):
 		return reverse('comment-update', kwargs={'pk': self.pk})
 
 class Recommendation(models.Model):
-	item_id = models.PositiveIntegerField()
-	recommended_items = models.TextField()
+	item_id = models.ForeignKey(Cafe, related_name='click_id')
+	recommended_items = models.ForeignKey(Cafe, related_name='recommend')
